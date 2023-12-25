@@ -25,11 +25,17 @@ inputFrameEmph = filter([1 -emphCoef],1,inputFrame);
 A = lpc(inputFrameEmph,p);                 % get coefficients
 excitat = filter(A,1,inputFrameEmph);      % get excitation
 
+% extending the excitation to counter the pitchshift fade out
+excitat = [excitat; excitat(end-128:end)];
+
 % window for pitchshifter
 window = rectwin(512);
 
 % pitch-shift excitation
 excitat = shiftPitch(excitat, shiftAmount, 'Window', window);
+
+% cut the duplicated tail of excitation
+excitat = excitat(1:frameLen);
 
 % re-apply cofficients
 outputFrame = filter(1,A,excitat);
