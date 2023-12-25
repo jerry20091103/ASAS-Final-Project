@@ -25,8 +25,11 @@ inputFrameEmph = filter([1 -emphCoef],1,inputFrame);
 A = lpc(inputFrameEmph,p);                 % get coefficients
 excitat = filter(A,1,inputFrameEmph);      % get excitation
 
+% window for pitchshifter
+window = rectwin(512);
+
 % pitch-shift excitation
-excitat = shiftPitch(excitat, shiftAmount);
+excitat = shiftPitch(excitat, shiftAmount, 'Window', window);
 
 % re-apply cofficients
 outputFrame = filter(1,A,excitat);
