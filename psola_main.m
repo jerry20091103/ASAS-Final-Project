@@ -1,7 +1,6 @@
 % ASAS 2023 FALL 
 % Final Project
-% Group 2
-% Tzu-Tsing Hung, Jih-Wei Yeh
+% Group 6
 
 % parameters
 audioDir = './AudioFiles/';
