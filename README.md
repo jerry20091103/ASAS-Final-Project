@@ -16,7 +16,7 @@ break
 case 2:(lpc)
 ...
 break
-case 3:(cepstrum)
+case 3:(psola)
 ...
 break
 
