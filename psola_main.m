@@ -15,5 +15,5 @@ audioOutput = psola_shift_pitch(audioInput, fs, semitone);
 soundsc(audioOutput, fs)
 
 %% store audio
-str = sprintf('psola_output_%d.wav', f_ratio);
+str = sprintf('psola_output_%d.wav', semitone);
 audiowrite(str, audioOutput, fs);
