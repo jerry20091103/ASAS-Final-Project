@@ -44,3 +44,26 @@ Why harmonizer?
 
 ## Timeline
 Monday night -> lpc + ppt
+
+
+## Final Project
+### real time (optional)
+- 鈺承
+
+### change the formants (optional)
+- 鈞堯
+
+### More audio examples
+
+### Presentation, PPT (ddl: 1/2)
+Requirement:
+- language: English
+- length: 10 min
+
+Outline: (ddl: 12/31 23:59) (google slide)
+- motivation
+- method (pitchshift, lpc, psola) (pitch detection)
+- result 
+
+### Next meeting time:
+- 1/1 night
