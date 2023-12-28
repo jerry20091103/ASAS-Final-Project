@@ -10,10 +10,8 @@ filename = 'male_vocal2.wav';
 
 N = length(audioInput);
 
-f_ratio = 2^(3/12);
-
 % Shift pitch
-audioOutput = psola_shift_pitch(audioInput, fs, f_ratio);
+audioOutput = psola_shift_pitch(audioInput, fs, semitone);
 soundsc(audioOutput, fs)
 
 %% store audio
