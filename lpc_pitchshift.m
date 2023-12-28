@@ -11,36 +11,61 @@
 function outputFrame = lpc_pitchshift(inputFrame, shiftAmount)
 
 % initalize parameters
-frameLen = size(inputFrame);    % frame length in samples
+frameLengthSamples = size(inputFrame);    % frame length in samples
 p = 100;                        % lpc coefficient order
 A = zeros(1,p+1);               % lpc coefficients
-excitat = zeros(frameLen);      % excitation of the vocal
+excitat = zeros(frameLengthSamples);      % excitation of the vocal
 emphCoef = 0.99;                % pre-emphasis coefficient
-outputFrame = zeros(frameLen);  % return
+outputFrame = zeros([frameLengthSamples, 1]);  % return
 
-% pre-emphasis
-inputFrameEmph = filter([1 -emphCoef],1,inputFrame);
+%
+frameLengthSamples2 = 2048;
+hopSize2 = frameLengthSamples2 / 2;
+numFrames2 = floor(frameLengthSamples / hopSize2) - 1;
 
-% lpc
-A = lpc(inputFrameEmph,p);                 % get coefficients
-excitat = filter(A,1,inputFrameEmph);      % get excitation
 
-% extending the excitation to counter the pitchshift fade out
-excitat = [excitat; excitat(end-128:end)];
+for frameNum2 = 1:numFrames2
+    frameStart2 = (frameNum2-1)*hopSize2+1;
+    frameEnd2 = (frameNum2-1)*hopSize2+frameLengthSamples2;
+        
+    % get the small frame
+    frame2 = inputFrame(frameStart2:frameEnd2);
 
-% window for pitchshifter
-window = rectwin(512);
+    % pre-emphasis
+    frame2 = filter([1 -emphCoef],1,frame2);    
 
-% pitch-shift excitation
-excitat = shiftPitch(excitat, shiftAmount, 'Window', window);
+    A(frameNum2,:) = lpc(frame2,p);           % get lpc coefficients
+    frame2 = filter(A(frameNum2,:),1,frame2); % get excitation
+        
+    % apply window
+    frame2 = apply_window(frame2);
 
-% cut the duplicated tail of excitation
-excitat = excitat(1:frameLen);
+    % overlap and add
+    excitat(frameStart2:frameEnd2) = excitat(frameStart2:frameEnd2) + frame2;
+end
 
-% re-apply cofficients
-outputFrame = filter(1,A,excitat);
+% pitch shift excitation
+excitat = shiftPitch(excitat, shiftAmount, 'LockPhase',true);
 
-% de-emphasis
-outputFrame = filter(1,[1 -emphCoef],outputFrame);
+% looping through small frames to do lpc filtering
+for frameNum2 = 1:numFrames2
+    frameStart2 = (frameNum2-1)*hopSize2+1;
+    frameEnd2 = (frameNum2-1)*hopSize2+frameLengthSamples2;
+        
+    % get the small frame of excitation
+    frame_ex = excitat(frameStart2:frameEnd2);
+        
+    % re-apply the original lpc coef
+    frame2 = filter(1,A(frameNum2,:),frame_ex);
+
+    % de-emphasis
+    frame2 = filter(1,[1 -emphCoef],frame2);
+        
+    % apply window
+    frame2 = apply_window(frame2);
+
+    % overlap and add
+    outputFrame(frameStart2:frameEnd2) = outputFrame(frameStart2:frameEnd2) + frame2;
+end
 
 return 
