@@ -41,9 +41,10 @@ Overlap and add algorithm exercise from UIUC
 %   f_ratio: frequency ratio(the changing in semitone)
 % output:
 %   new_signal: audioOutput
-function [new_signal] = psola_shift_pitch(signal, fs, f_ratio)
+function [new_signal] = psola_shift_pitch(signal, fs, semitone)
     % some parameters we can modifiy
     peaks = find_peaks(signal, fs, 1500, 50, 40, 1.3, 0.7);
+    f_ratio = 2^(semitone/12);
     new_signal = psola(signal, peaks, f_ratio);
 end
 
