@@ -13,7 +13,7 @@ function shiftAmount = get_shift_amount(inputFrame, fs, key, interval)
     freq = pitch(inputFrame, fs);
     % convert the frequency to midi note number (69 is A4 = 440Hz)
     midiNote = 12 * log2(freq / 440) + 69;
-    if midiNote < LOW_NOTE || midiNote > HIGH_NOTE
+    if midiNote < LOW_NOTE | midiNote > HIGH_NOTE
         shiftAmount = -1;
         return;
     end

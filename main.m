@@ -2,8 +2,21 @@
 % reads in audio and divided it into overlapping frames
 clear; close all;
 
+Key.C = 0;
+Key.CSharp = 1;
+Key.D = 2;
+Key.DSharp = 3;
+Key.E = 4;
+Key.F = 5;
+Key.FSharp = 6;
+Key.G = 7;
+Key.GSharp = 8;
+Key.A = 9;
+Key.ASharp = 10;
+Key.B = 11;
+
 % parameters
-audioDir = './';
+audioDir = './AudioFiles/';
 filename = 'male_vocal2.wav';
 frameLengthSamples = 2048*8;
 
@@ -35,9 +48,12 @@ for frameNum = 1:numFrames
 
     % get the current frame
     frame = audioInput(frameStart:frameEnd);
+
+    semitone = get_shift_amount(frame, fs, Key.D, 3);
     
     % lpc pitch shift
-    filteredFrame = lpc_pitchshift(frame, shiftAmount);
+    filteredFrame = lpc_pitchshift(frame, semitone);
+    % filteredFrame = psola_shift_pitch(frame, fs, semitone);
     
     % apply the window
     filteredFrame = apply_window(filteredFrame);
@@ -49,4 +65,4 @@ toc
 % listen to the audio
 soundsc(audioOutput, fs);
 
-%audiowrite("test.wav", audioOutput, fs);
+% audiowrite("output_Bm_+3_psola.wav", audioOutput, fs);

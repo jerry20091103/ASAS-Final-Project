@@ -109,7 +109,8 @@ function [periods] = compute_periods_per_sequence(signal, sequence, min_period, 
         end
         fourier(1) = 0;  % remove DC component
         autoc = ifft(fourier.*conj(fourier)); % auto-correlation in time <=> conjugate multiplication in frequency
-        [~, I] = max(autoc(min_period: max_period));
+        max_period_limit = min(max_period, length(autoc));
+        [~, I] = max(autoc(min_period: max_period_limit));
         autoc_peak = min_period + I;
         periods(end+1) = autoc_peak;
         offset = offset + sequence;
