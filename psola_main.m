@@ -16,8 +16,6 @@ f_ratio = 2^(3/12);
 audioOutput = psola_shift_pitch(audioInput, fs, f_ratio);
 soundsc(audioOutput, fs)
 
-fprintf("Hi\n")
-
 %% store audio
 str = sprintf('psola_output_%d.wav', f_ratio);
 audiowrite(str, audioOutput, fs);
