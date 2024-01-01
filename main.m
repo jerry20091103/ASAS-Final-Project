@@ -19,6 +19,7 @@ Key.B = 11;
 audioDir = './AudioFiles/';
 filename = 'male_vocal2.wav';
 frameLengthSamples = 2048*8;
+formantShift = 0;
 
 [audioInput, fs] = audioread([audioDir, filename]);
 audioInput = audioInput(1:end,1);
@@ -52,7 +53,7 @@ for frameNum = 1:numFrames
     semitone = get_shift_amount(frame, fs, Key.D, 3);
     
     % lpc pitch shift
-    filteredFrame = lpc_pitchshift(frame, semitone);
+    filteredFrame = lpc_pitchshift(frame, semitone, formantShift);
     % filteredFrame = psola_shift_pitch(frame, fs, semitone);
     
     % apply the window
