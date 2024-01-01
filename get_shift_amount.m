@@ -44,12 +44,12 @@ function shiftAmount = get_shift_amount(inputFrame, fs, key, interval)
     noteDistance = [2, 2, 1, 2, 2, 2, 1]; % the distance between each note in a major scale
     shiftAmount = 0;
     if interval > 0
-        for i = 1:interval
+        for i = 1:interval-1
             shiftAmount = shiftAmount + noteDistance(mod(detectedNote + i - 1, 7) + 1);
         end
     else
-        for i = 1:-interval
-            shiftAmount = shiftAmount - noteDistance(mod(detectedNote - i - 1, 7) + 1);
+        for i = 1:(-interval)-1
+            shiftAmount = shiftAmount - noteDistance(mod(detectedNote - i - 1 + 7, 7) + 1);
         end
     end
 end

@@ -17,7 +17,7 @@ Key.B = 11;
 
 % parameters
 audioDir = './AudioFiles/';
-filename = 'male_vocal2.wav';
+filename = 'male_vocal3.wav';
 frameLengthSamples = 2048*8;
 formantShift = 0;
 
